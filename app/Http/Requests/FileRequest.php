@@ -26,7 +26,17 @@ class FileRequest extends FormRequest
         return [
             'files' => 'required|array',
             'uploaderKey' => 'required|string',
-            'sendEmail' => 'string'
+            'sendEmail' => 'required|string',
+            'emailFrom' => 'required_if:sendEmail,==,true|email',
+            'emailTo' => 'required_if:sendEmail,==,true|email',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'emailFrom.required_if' => 'Podaj swój adres email.',
+            'emailFrom.email' => 'Podaj poprawny adres email.'
         ];
     }
 }
