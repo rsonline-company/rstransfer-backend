@@ -19,4 +19,10 @@ class FileController extends Controller
 
         return response()->json($response);
     }
+
+    public function load() {
+        $response = $this->fileInterface->load();
+
+        return response()->json($response);
+    }
 }

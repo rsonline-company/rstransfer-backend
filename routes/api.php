@@ -15,10 +15,6 @@ use App\Http\Controllers\{FileController, AuthController};
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('files/store', [FileController::class, 'store']);
 
 Route::get('download/{name}', function($fileName) {
@@ -32,4 +28,8 @@ Route::get('download/{name}', function($fileName) {
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+});
+
+Route::group(['middleware' => 'api'], function() {
+    Route::post('files/load', [FileController::class, 'load']);
 });

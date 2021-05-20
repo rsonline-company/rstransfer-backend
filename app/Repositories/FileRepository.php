@@ -37,6 +37,7 @@ class FileRepository implements FileInterface
                 'name' => $fileName,
                 'parent_zip_name' => $zipName,
                 'uploader_key' => $data['uploaderKey'],
+                'user_id' => auth()->user() ? auth()->user()->id : null
             ));
         }
 
@@ -64,7 +65,7 @@ class FileRepository implements FileInterface
         foreach($files as $file) {
             $fileNameToStore = $this->createFileName($file);
             array_push($fileNames, $fileNameToStore);
-    
+
             $path = $file->storeAs('public/files', $fileNameToStore);
         }
 
@@ -107,5 +108,14 @@ class FileRepository implements FileInterface
         $headers = ["Content-Type: application/$fileExtension"];
 
         return response()->download($filePath, $fileName, $headers);
+    }
+
+    public function load() {
+        $files = DB::table('files')
+            ->where('user_id', auth()->user()->id)
+            ->select('name', 'parent_zip_name as parentZipName', 'created_at as createdAt')
+            ->get();
+
+        return $files;
     }
 }

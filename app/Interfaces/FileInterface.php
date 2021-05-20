@@ -13,4 +13,12 @@ interface FileInterface
      * @access  public
      */
     public function store(FileRequest $request);
+
+    /**
+     * Load files
+     * 
+     * @method  POST    api/files/load
+     * @access  public
+     */
+    public function load();
 }
