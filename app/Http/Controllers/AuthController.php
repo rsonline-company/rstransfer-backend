@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\AuthRequest;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -24,7 +25,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request) {
+    public function register(AuthRequest $request) {
         $user = new User;
         $user->email = $request->email;
         $user->password = password_hash($request->password, PASSWORD_DEFAULT);
