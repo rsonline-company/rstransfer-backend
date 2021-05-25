@@ -37,7 +37,10 @@ class FileRepository implements FileInterface
                 'name' => $fileName,
                 'parent_zip_name' => $zipName,
                 'uploader_key' => $data['uploaderKey'],
-                'user_id' => auth()->user() ? auth()->user()->id : null
+                'user_id' => auth()->user() ? auth()->user()->id : null,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+                'expires_at' => date('Y-m-d H:i:s', strtotime('+3 days'))
             ));
         }
 
@@ -113,7 +116,8 @@ class FileRepository implements FileInterface
     public function load() {
         $files = DB::table('files')
             ->where('user_id', auth()->user()->id)
-            ->select('name', 'parent_zip_name as parentZipName', 'created_at as createdAt')
+            ->select('name', 'parent_zip_name as parentZipName', 'expires_at as expiresAt')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $files;

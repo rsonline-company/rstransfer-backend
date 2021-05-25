@@ -19,6 +19,7 @@ class CreateFilesTable extends Migration
             $table->string('parent_zip_name')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('uploader_key')->nullable();
+            $table->timestamp('expires_at');
             $table->timestamps();
         });
     }
