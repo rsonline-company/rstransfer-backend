@@ -6,6 +6,7 @@ use App\Http\Requests\FileRequest;
 use App\Interfaces\FileInterface;
 use File;
 use DB;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class FileRepository implements FileInterface
 {
@@ -57,6 +58,8 @@ class FileRepository implements FileInterface
                 $response->downloadLink = $_SERVER['SERVER_NAME'].':8000/api/download/'.$fileNames[0];
             }
         } else {
+            $this->sendMail();
+
             $response = 'Email has been sent.';
         }
 
@@ -86,7 +89,7 @@ class FileRepository implements FileInterface
                 $fileNameToStore = $this->createFileName($file);
                 array_push($fileNames, $fileNameToStore);
 
-                $zip->addFile($file, $fileNameToStore); // add to zip
+                $zip->addFile($file, $fileNameToStore);
             }
             $zip->close();
         }
@@ -111,6 +114,15 @@ class FileRepository implements FileInterface
         $headers = ["Content-Type: application/$fileExtension"];
 
         return response()->download($filePath, $fileName, $headers);
+    }
+
+    private function sendMail($adress) {
+        $email = new PHPMailer();
+
+        $email->SetFrom('tomasz.niedzielski@rsonline.pl', 'Tomasz');
+        $email->Subject = 'Plik wysłany za pośrednictwem RSTransfer';
+        // $email->Body = 'WTF?'\
+        $email->AddAddress($adress);
     }
 
     public function load() {
